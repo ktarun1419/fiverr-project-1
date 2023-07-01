@@ -1,0 +1,98 @@
+.hero {
+  height: 100%;
+  margin:3%;
+}
+
+.hero .coinCard {
+  width: 50%;
+  height: 520px;
+  background-color: black;
+  color: var(--text-color);
+  padding: 4%;
+ 
+  box-shadow: 0px -1px 63px 6px rgba(249, 184, 4, 0.655);
+  border-radius: 80px;
+
+}
+
+.hero .coinCard .wrapperBox {
+  border: 1px solid white;
+  border-radius: 11px;
+  padding: 10px;
+}
+
+.hero .coinCard .textInput {
+  background-color: var(--secondary-color);
+  color: #000;
+  border-radius: 10px;
+}
+
+.hero .content {
+  position: relative;
+  left: 50%;
+  margin-bottom: 100px;
+}
+
+.hero .content h2 {
+  color: var(--text-color);
+  font-size: 80px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.hero .content h2:nth-child(1) {
+  color: var(--primary-color);
+  -webkit-text-stroke: 2px var(--secondary-color);
+}
+
+.hero .content h2:nth-child(2) {
+  color: var(--secondary-color);
+  animation: animate 2s ease-in-out infinite;
+}
+
+@keyframes animate {
+  0%,
+  100% {
+    clip-path: polygon(
+      0% 45%,
+      16% 44%,
+      33% 50%,
+      54% 60%,
+      70% 61%,
+      84% 59%,
+      100% 52%,
+      100% 100%,
+      0% 100%
+    );
+  }
+
+  50% {
+    clip-path: polygon(
+      0% 60%,
+      15% 65%,
+      34% 66%,
+      51% 62%,
+      67% 50%,
+      84% 45%,
+      100% 46%,
+      100% 100%,
+      0% 100%
+    );
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .hero .coinCard {
+    margin-top: 0;
+  }
+
+  .hero .content {
+    top: 40%;
+    left: 50%;
+    margin-bottom: 250px;
+  }
+
+  .hero .content h2 {
+    font-size: 60px;
+  }
+}
