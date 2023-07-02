@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Logo from ".././assets/images/logo.png";
+import success from '.././assets/images/check.png'
 import {
   Typography,
   // Box,
@@ -49,7 +50,8 @@ const providerx = new ethers.providers.JsonRpcProvider(
 // console.log(Ducoin_Cn)
 function Hero(props) {
   const theme = useTheme();
- 
+  const [transactionStatus,setTransactionStatus]=useState(false)
+  const [showLoader,setShowLoader]=useState(false)
 const [Dapp_Provider, setDapp_Provider] = useState(undefined)
 const [User_Wallet, setUser_Wallet] = useState(undefined)
   const [values, setValues] = useState({
@@ -100,7 +102,9 @@ setUser_Wallet(obj?.Address)
     const accounts = User_Wallet;
 
 
-    await contract.approve(spender, amount);
+    let data=await contract.approve(spender, amount);
+    
+    return true
   };
 
   const buyToken = async (tokenAddress, amount) => {
@@ -108,7 +112,11 @@ setUser_Wallet(obj?.Address)
     const contract = new ethers.Contract(Ico_Address, Ico_Abi, Dapp_Provider);
     const accounts = User_Wallet;
 
-    await contract.BuyToken_busd(amount);
+   let data=await contract.BuyToken_busd(amount);
+   console.log({data})
+   if(data?.hash){
+    setTransactionStatus(true)
+   }
   };
 
   const ButtonControler = async () => {
@@ -138,10 +146,13 @@ setUser_Wallet(obj?.Address)
   };
 
   const Buy_Usdt = async () => {
+    setShowLoader(true)
     try {
       await approve(Usdt_Address, Ico_Address, ethers.BigNumber.from(values.enteredValue).mul(10).pow(18));
       await buyToken(Usdt_Address, ethers.BigNumber.from(values.enteredValue).mul(10).pow(18));
+      setTransactionStatus(true)
     } catch (error) {
+      handleClose()
       alert("Error in buy function");
       console.log(error);
     }
@@ -149,15 +160,21 @@ setUser_Wallet(obj?.Address)
   
 
   const Buy_Busd = async () => {
+    setShowLoader(true)
     try {
+
       await approve(Busd_Address, Ico_Address, ethers.BigNumber.from(values.enteredValue).mul(10).pow(18));
       await buyToken(Busd_Address, ethers.BigNumber.from(values.enteredValue).mul(10).pow(18));
     } catch (error) {
+      handleClose()
       console.log(error);
     }
   };
   
-
+const handleClose=()=>{
+  setShowLoader(false)
+  setTransactionStatus(false)
+}
  
 
   return (<>
@@ -165,6 +182,27 @@ setUser_Wallet(obj?.Address)
     sx={{ backgroundColor: theme.palette.primary.dark }}
 
   >
+   {showLoader && <div className="loader_container">
+    {transactionStatus ? 
+   <>
+  <img src={success}  alt="success" className="success"/>
+  <h2 class="line-1">Transaction Completed.</h2>
+  <Button onClick={handleClose}
+   variant="contained"
+   color="warning"
+   size="medium"
+  >Close</Button>
+  
+  </>  :
+    <>
+      <div class="loader"></div>
+   <h2 class="line-1">Please wait while transaction is in process ...</h2>
+
+    </> 
+  }
+  
+    </div>}
+    {console.log({showLoader})}
     <Toolbar sx={{ justifyContent: "space-between" }}>
     <img src={Logo} alt="logo" width={100} />
       {Dapp_Provider?(<></>):(<button  onClick={connectWallet } className="connect-btn"><h4>Connect</h4></button>)}
